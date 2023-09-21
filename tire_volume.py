@@ -1,3 +1,13 @@
+"""
+Many companies wish to understand the needs
+and wants of their customers more deeply so
+the company can create products that fill those
+needs and wants. One way to understand customers
+more deeply is to record the values entered by customers
+while they are using a program and then to analyze those values.
+One common way to record values is for a program to store them in a file.
+"""
+
 # Import the Math funtions
 import math
 
