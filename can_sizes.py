@@ -7,113 +7,49 @@ import math
 
 # Defining the Main function
 def main():
-    name = '#1 Picnic'
-    radius = 6.83
-    height = 10.16
-    cost = 0.28
-    volume = compute_volume(radius, height)
-    surface_area = compute_surface_area(radius, height)
-    storage_efficiency = compute_storage_efficiency(radius, height)
-    cost_efficiency = compute_cost_efficiency(radius, height, cost)
-    print(f'{name} {storage_efficiency:.2f} {cost_efficiency:.2f}')
+    can_names = ['#1 Picnic', '#1 Tall', '#2', '#2.5', '#3 Cylinder', '#5', '#6Z', '#8Z Short', '#10', '#211', '#300', '#303']
+    can_radius = [6.83, 7.78, 8.73, 10.32, 10.79, 13.02, 5.40, 6.83, 15.72, 6.83, 7.62, 8.10]
+    can_height = [10.16, 11.91, 11.59, 11.91, 17.78, 14.29, 8.89, 7.62, 17.78, 12.38, 11.27, 11.11]
+    can_cost = [0.28, 0.43, 0.45, 0.61, 0.86, 0.83, 0.22, 0.26, 1.53, 0.34, 0.38, 0.42]
 
-    name = '#1 Tall'
-    radius = 7.78
-    height = 11.91
-    volume = compute_volume(radius, height)
-    surface_area = compute_surface_area(radius, height)
-    storage_efficiency = compute_storage_efficiency(radius, height)
-    cost_efficiency = compute_cost_efficiency(radius, height, cost)
-    print(f'{name} {storage_efficiency:.2f} {cost_efficiency:.2f}')
+    best_storage_efficiency = None
+    best_cost_efficiency = None
+    best_storage_number = -1
+    best_cost_number = -1
 
-    name = '#2'
-    radius = 8.73
-    height = 11.59
-    volume = compute_volume(radius, height)
-    surface_area = compute_surface_area(radius, height)
-    storage_efficiency = compute_storage_efficiency(radius, height)
-    cost_efficiency = compute_cost_efficiency(radius, height, cost)
-    print(f'{name} {storage_efficiency:.2f} {cost_efficiency:.2f}')
+    # For each can in the list extract value and
+    # assign into the variables
+    for i in range(len(can_names)):
+        name = can_names[i]
+        radius = can_radius[i]
+        height = can_height[i]
+        cost = can_cost[i]
+    
+        # Call cost and storage efficiency functions
+        storage_efficiency = compute_storage_efficiency(radius, height)
+        cost_efficiency = compute_cost_efficiency(radius, height, cost)
 
-    name = '#2.5'
-    radius = 10.32
-    height = 11.91
-    volume = compute_volume(radius, height)
-    surface_area = compute_surface_area(radius, height)
-    storage_efficiency = compute_storage_efficiency(radius, height)
-    cost_efficiency = compute_cost_efficiency(radius, height, cost)
-    print(f'{name} {storage_efficiency:.2f} {cost_efficiency:.2f}')
+        # Print can sizes and values
+        print(f'{name} {storage_efficiency:.2f} {cost_efficiency:.0f}')
 
-    name = '#3 Cylinder'
-    radius = 10.79
-    height = 17.78
-    volume = compute_volume(radius, height)
-    surface_area = compute_surface_area(radius, height)
-    storage_efficiency = compute_storage_efficiency(radius, height)
-    cost_efficiency = compute_cost_efficiency(radius, height, cost)
-    print(f'{name} {storage_efficiency:.2f} {cost_efficiency:.2f}')
+        # If the storage efficiency of the current can size is
+        # greater than the maximum storage efficiency, save then
+        # the current can size name and its storage efficiency.
+        if storage_efficiency > best_storage_number:
+            best_storage_number = storage_efficiency
+            best_storage_can = name
 
-    name = '#5'
-    radius = 13.02
-    height = 14.29
-    volume = compute_volume(radius, height)
-    surface_area = compute_surface_area(radius, height)
-    storage_efficiency = compute_storage_efficiency(radius, height)
-    cost_efficiency = compute_cost_efficiency(radius, height, cost)
-    print(f'{name} {storage_efficiency:.2f} {cost_efficiency:.2f}')
+        # If the cost efficiency of the current can size is
+        # greater than the maximum cost efficiency, then save
+        # the current can size name and its cost efficiency.
+        if cost_efficiency > best_cost_number:
+            best_cost_number = cost_efficiency
+            best_cost_can = name
 
-    name = '#6Z'
-    radius = 5.40
-    height = 8.89
-    volume = compute_volume(radius, height)
-    surface_area = compute_surface_area(radius, height)
-    storage_efficiency = compute_storage_efficiency(volume, surface_area)
-    print(f'{name} {storage_efficiency:.2f}')
-
-    name = '#8Z Short'
-    radius = 6.83
-    height = 7.62
-    volume = compute_volume(radius, height)
-    surface_area = compute_surface_area(radius, height)
-    storage_efficiency = compute_storage_efficiency(radius, height)
-    cost_efficiency = compute_cost_efficiency(radius, height, cost)
-    print(f'{name} {storage_efficiency:.2f} {cost_efficiency:.2f}')
-
-    name = '#10'
-    radius = 15.72
-    height = 17.78
-    volume = compute_volume(radius, height)
-    surface_area = compute_surface_area(radius, height)
-    storage_efficiency = compute_storage_efficiency(radius, height)
-    cost_efficiency = compute_cost_efficiency(radius, height, cost)
-    print(f'{name} {storage_efficiency:.2f} {cost_efficiency:.2f}')
-
-    name = '#211'
-    radius = 6.83
-    height = 12.38
-    volume = compute_volume(radius, height)
-    surface_area = compute_surface_area(radius, height)
-    storage_efficiency = compute_storage_efficiency(radius, height)
-    cost_efficiency = compute_cost_efficiency(radius, height, cost)
-    print(f'{name} {storage_efficiency:.2f} {cost_efficiency:.2f}')
-
-    name = '#300'
-    radius = 7.62
-    height = 11.27
-    volume = compute_volume(radius, height)
-    surface_area = compute_surface_area(radius, height)
-    storage_efficiency = compute_storage_efficiency(radius, height)
-    cost_efficiency = compute_cost_efficiency(radius, height, cost)
-    print(f'{name} {storage_efficiency:.2f} {cost_efficiency:.2f}')
-
-    name = '#303'
-    radius = 8.10
-    height = 11.11
-    volume = compute_volume(radius, height)
-    surface_area = compute_surface_area(radius, height)
-    storage_efficiency = compute_storage_efficiency(radius, height)
-    cost_efficiency = compute_cost_efficiency(radius, height, cost)
-    print(f'{name} {storage_efficiency:.2f} {cost_efficiency:.2f}')
+    # Print best storage and cost efficiencies
+    print()
+    print('Best can size in storage efficiency:', best_storage_can)
+    print('Best can size in cost efficiency:', best_cost_can)
 
 # Defining compute volume function
 # In this function we could compute the volume for cylinder forms
@@ -130,16 +66,13 @@ def compute_surface_area (radius, height):
 
 # Defining compute storage efficiency function
 def compute_storage_efficiency(radius, height):
-    volume = compute_volume(radius, height)
-    surface_area = compute_surface_area(radius, height)
-    storage_efficiency = volume / surface_area
+    storage_efficiency = compute_volume(radius, height) / compute_surface_area(radius, height)
     return storage_efficiency
 
 # Defining compute cost efficiency fnction
 # Compuute and return cost efficiency
 def compute_cost_efficiency(radius, height, cost):
-    volume = compute_volume(radius, height)
-    cost_efficiency = volume / cost
+    cost_efficiency = compute_volume(radius, height) / cost
     return cost_efficiency
 
 # Calling main function and
