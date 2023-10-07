@@ -136,10 +136,83 @@ def make_sentence(quantity, tense):
     determine = get_determiner(quantity)
     noun = get_noun(quantity)
     verb = get_verb(quantity, tense)
-    sentence = f'{determine.capitalize()} {noun} {verb}.'
+    phrase = get_prepositional_phrase(quantity)
+    phrase_2 = get_prepositional_phrase(quantity)
+    adjective = get_adjective()
+    adverb = get_adverb()
+    sentence = f'{determine.capitalize()} {adjective} {noun} {adverb} {verb} {phrase} {phrase_2}.'
     return sentence
-    
 
+# Define the get preposition function.
+# This will get a preposition to add in the sentence. 
+def get_preposition():
+    """Return a randomly chosen preposition
+    from this list of prepositions:
+        "about", "above", "across", "after", "along",
+        "around", "at", "before", "behind", "below",
+        "beyond", "by", "despite", "except", "for",
+        "from", "in", "into", "near", "of",
+        "off", "on", "onto", "out", "over",
+        "past", "to", "under", "with", "without"
+
+    Return: a randomly chosen preposition.
+    """
+    prepositions = ['about', 'above', 'across', 'after', 'along', 'around', 'at', 'before',
+                     'behind', 'below', 'beyond', 'by', 'despite', 'except', 'for',
+                     'from', 'in', 'into', 'near', 'of', 'off', 'on', 'onto', 'out',
+                     'over', 'past', 'to', 'under', 'with', 'without']
+    preposition = random.choice(prepositions)
+    return preposition
+
+# Define the get propositional phrase function
+def get_prepositional_phrase(quantity):
+    """Build and return a prepositional phrase composed
+    of three words: a preposition, a determiner, and a
+    noun by calling the get_preposition, get_determiner,
+    and get_noun functions.
+
+    Parameter
+        quantity: an integer that determines if the
+            determiner and noun in the prepositional
+            phrase returned from this function should
+            be single or plural.
+    Return: a prepositional phrase.
+    """
+    preposition = get_preposition()
+    determiner = get_determiner(quantity)
+    noun = get_noun(quantity)
+    adjective = get_adjective()
+    phrase = f'{preposition} {determiner.capitalize()} {adjective} {noun}'
+    return phrase
+
+# Define get adjetive function
+def get_adjective():
+    """Return a randomly chosen adjective
+    from this list of adjetives:
+        'fast', 'smart', 'tall', 'short', 'dumb', 'slow', 'bad', 'big', 'angry',
+        'beautiful', 'awful', 'cruel', 'adorable', 'clever', 'charming', 'bored', 'calm'     
+        Return: a randomly chosen adjective.
+    """
+
+    get_adjective = ['fast', 'smart', 'tall', 'short', 'dumb', 'slow', 'bad', 'big', 'angry',
+        'beautiful', 'awful', 'cruel', 'adorable', 'clever', 'charming', 'bored', 'calm',
+        'red', 'yellow', 'blue', 'dinky', 'busy']
+    adjective = random.choice(get_adjective)
+    return adjective
+
+# Define get adverb function
+def get_adverb():
+    """Return a randomly chosen adverb
+    from this list of adverbs:
+        'calmly', 'sweetly', 'slowly', 'fastly', 'quickly', 'always', 'actually', 'deeply', 'briefly',
+        'beautifully', 'awfully', 'cruelly', 'dearly', 'cleverly', 'acutely', 'bitterly', 'bravely'     
+        Return: a randomly chosen adverb.
+    """
+
+    get_adverb = ['calmly', 'sweetly', 'slowly', 'fastly', 'quickly', 'always', 'actually', 'deeply', 'briefly',
+        'beautifully', 'awfully', 'cruelly', 'dearly', 'cleverly', 'acutely', 'bitterly', 'bravely']
+    adverb = random.choice(get_adverb)
+    return adverb
 
 # Call the main function
 main()
