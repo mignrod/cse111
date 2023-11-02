@@ -15,33 +15,34 @@ def main():
     # return 
 
     # Get a chemical formula for a molecule from the user.
-    chemical_formula = input('Enter the molecular formula of the sample: ')
+    formula = input('Enter the molecular formula of the sample: ')
 
     # Get the mass of a chemical sample in grams from the user.
-    mass = input('Enter the mass in grams of the sample: ')
+    mass = float(input('Enter the mass in grams of the sample: '))
 
     # Call the make_periodic_table function and
     # store the periodic table in a variable.
     periodic_table_dict = make_periodic_table()
+    
 
     # Call the parse_formula function to convert the
     # chemical formula given by the user to a compound
     # list that stores element symbols and the quantity
     # of atoms of each element in the molecule.
-    symbol_elements = [parse_formula(chemical_formula, periodic_table_dict)]
+    symbol_quantity_list = parse_formula(formula, periodic_table_dict)
 
     # Call the compute_molar_mass function to compute the
     # molar mass of the molecule from the compound list.
-    molar_mass = compute_molar_mass(symbol_elements, periodic_table_dict)
+    molar_mass = compute_molar_mass(symbol_quantity_list, periodic_table_dict)
 
     # Compute the number of moles in the sample.
     moles = mass / molar_mass
 
     # Print the molar mass.
-    print(f'{molar_mass} grams/mole')
+    print(f'{molar_mass:.5f} grams/mole')
 
     # Print the number of moles.
-
+    print(f'{moles:.5f} moles')
 
 
 def make_periodic_table():
@@ -52,14 +53,14 @@ def make_periodic_table():
 
     # Create a compound list that store inner lists of elements.
     periodic_table_dict = {
-        # [symbol, name, atomic_mass]
+        # symbol: [name, atomic_mass]
         'Ac': ['Actinium', 227],
         'Ag': ['Silver', 107.8682],
-        'Al': ['Aluminum',	26.9815386],
+        'Al': ['Aluminum', 26.9815386],
         'Ar': ['Argon',	39.948],
-        'As': ['Arsenic',	74.9216],
-        'At': ['Astatine',	210],
-        'Au': ['Gold',	196.966569],
+        'As': ['Arsenic', 74.9216],
+        'At': ['Astatine', 210],
+        'Au': ['Gold', 196.966569],
         'B': ['Boron',	10.811],
         'Ba': ['Barium',	137.327],
         'Be': ['Beryllium',	9.012182],
@@ -148,7 +149,7 @@ def make_periodic_table():
         'Zn': ['Zinc',	65.38],
         'Zr': ['Zirconium',	91.224]
     }
-    
+    return periodic_table_dict
 
 # Indexes for inner lists in the periodic table
 NAME_INDEX = 0
@@ -185,17 +186,15 @@ def compute_molar_mass(symbol_quantity_list, periodic_table_dict):
         # Get the atomic mass for the symbol from the dictionary.
         # Multiply the atomic mass by the quantity.
         # Add the product into the total molar mass.
+    
     molar_mass = 0
-    for item, quantity in symbol_quantity_list:
-        atomic_mass = periodic_table_dict[item][ATOMIC_MASS_INDEX]
-        molar_mass += atomic_mass * quantity
-        symbol_quantity_list.append(molar_mass)
-    return molar_mass
-
-
+    for symbol, quantity in symbol_quantity_list:
+        atomic_mass = periodic_table_dict[symbol][ATOMIC_MASS_INDEX]
+        molar_mass += (atomic_mass * quantity)
+        # symbol_quantity_list.append(molar_mass)
+        
     # Return the total molar mass.
-    return
-
+    return molar_mass
 
 
 # If this file is executed like this:
