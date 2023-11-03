@@ -29,7 +29,7 @@ def main():
     # chemical formula given by the user to a compound
     # list that stores element symbols and the quantity
     # of atoms of each element in the molecule.
-    symbol_quantity_list = parse_formula(formula, periodic_table_dict)
+    symbol_quantity_list = parse_formula(formula.upper(), periodic_table_dict)
 
     # Call the compute_molar_mass function to compute the
     # molar mass of the molecule from the compound list.
@@ -43,6 +43,27 @@ def main():
 
     # Print the number of moles.
     print(f'{moles:.5f} moles')
+
+    print()
+    known_molecules_dict = {
+        "Al2O3": "aluminum oxide",
+        "CH3OH": "methanol",
+        "C2H6O": "ethanol",
+        "C2H5OH": "ethanol",
+        "C3H8O": "isopropyl alcohol",
+        "C3H8": "propane",
+        "C4H10": "butane",
+        "C6H6": "benzene",
+        "C6H14": "hexane",
+        "C8H18": "octane",
+        "CH3(CH2)6CH3": "octane",
+        "C13H18O2": "ibuprofen",
+        "C13H16N2O2": "melatonin",
+        "Fe2O3": "iron oxide",
+        "FeS2": "iron pyrite",
+        "H2O": "water"
+    }
+    get_formula_name(formula.upper(), known_molecules_dict)
 
 
 def make_periodic_table():
@@ -195,6 +216,30 @@ def compute_molar_mass(symbol_quantity_list, periodic_table_dict):
         
     # Return the total molar mass.
     return molar_mass
+
+def get_formula_name(formula, known_molecules_dict):
+    """Try to find formula in the known_molecules_dict.
+    If formula is in the known_molecules_dict, return
+    the name of the chemical formula; otherwise return
+    "unknown compound".
+
+    Parameters
+        formula is a string that contains a chemical formula
+        known_molecules_dict is a dictionary that contains
+            known chemical formulas and their names
+    Return: the name of a chemical formula
+    """
+
+    if formula in known_molecules_dict:
+        name = known_molecules_dict[formula]
+        name = name.capitalize()
+        return print(f'The {formula} name is: {name}')
+
+    else:
+        return print(f'{formula} is an unknown compound')
+
+   
+    
 
 
 # If this file is executed like this:
