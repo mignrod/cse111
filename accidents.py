@@ -67,9 +67,6 @@ def main():
     except FileNotFoundError as not_found:
         print(not_found)
         print('PLease choose a different file')
-
-    # except ValueError as value_err:
-    #     print('Error:', value_err)
     
     except (csv.Error, KeyError) as error:
         print(f'Error: line {reader.line_num} of {text_file.name} is formatted incorrectly')
@@ -77,22 +74,6 @@ def main():
     except ZeroDivisionError as zero_div_err:
         print(f'Error: line {reader.line_num} of {text_file.name} contains 0')
         print(f'in the "Fatal Crashes" or "Cell Phone Use" column.')
-
-# def get_float_numb(prompt, lower_bound, upper_bound):
-#     number = None
-#     while number == None:
-#         try:
-#             number = float(input(prompt))
-#             if number < lower_bound:
-#                 print(f'Error: {number} is too low. Please enter a different number')
-#                 number = None
-#             elif number > upper_bound:
-#                 print(f'Error: {number} is too high. Please enter a different number')
-#                 number = None
-#         except ValueError as value_err:
-#             print('Error:', value_err)
-    
-#     return number
 
 def estimate_reduction(row, behavior_key, perc_reduc):
     """Estimate and return the number of injuries and deaths that
