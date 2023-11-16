@@ -22,8 +22,18 @@ def main():
         filename = input("Name of file that contains NHTSA data: ")
         with open(filename, "rt") as text_file:
 
-            # Prompt the user for a percentage.
-            perc_reduc = get_float_numb("Percent reduction of texting while driving [0, 100]: ", 0, 100)
+            perc_reduc = None
+            while perc_reduc == None:
+                try:
+                    perc_reduc = float(input("Percent reduction of texting while driving [0, 100]: "))
+                    if perc_reduc < 0:
+                        print(f'Error: {perc_reduc} is too low. Please enter a different number')
+                        perc_reduc = None
+                    elif perc_reduc > 100:
+                        print(f'Error: {perc_reduc} is too high. Please enter a different number')
+                        perc_reduc = None
+                except ValueError as value_err:
+                    print('Error:', value_err)
 
             print()
             print(f"With a {perc_reduc}% reduction in using a cell",
@@ -58,8 +68,8 @@ def main():
         print(not_found)
         print('PLease choose a different file')
 
-    except ValueError as value_err:
-        print('Error:', value_err)
+    # except ValueError as value_err:
+    #     print('Error:', value_err)
     
     except (csv.Error, KeyError) as error:
         print(f'Error: line {reader.line_num} of {text_file.name} is formatted incorrectly')
@@ -68,21 +78,21 @@ def main():
         print(f'Error: line {reader.line_num} of {text_file.name} contains 0')
         print(f'in the "Fatal Crashes" or "Cell Phone Use" column.')
 
-def get_float_numb(prompt, lower_bound, upper_bound):
-    number = None
-    while number == None:
-        try:
-            number = float(input(prompt))
-            if number < lower_bound:
-                print(f'Error: {number} is too low. Please enter a different number')
-                number = None
-            elif number > upper_bound:
-                print(f'Error: {number} is too high. Please enter a different number')
-                number = None
-        except ValueError as value_err:
-            print('Error:', value_err)
+# def get_float_numb(prompt, lower_bound, upper_bound):
+#     number = None
+#     while number == None:
+#         try:
+#             number = float(input(prompt))
+#             if number < lower_bound:
+#                 print(f'Error: {number} is too low. Please enter a different number')
+#                 number = None
+#             elif number > upper_bound:
+#                 print(f'Error: {number} is too high. Please enter a different number')
+#                 number = None
+#         except ValueError as value_err:
+#             print('Error:', value_err)
     
-    return number
+#     return number
 
 def estimate_reduction(row, behavior_key, perc_reduc):
     """Estimate and return the number of injuries and deaths that
