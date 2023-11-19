@@ -1,5 +1,5 @@
 """
-A local grocery store subscribes to an online service that enables its customers 
+A local grocery store called 'Inkom Emporium'subscribes to an online service that enables its customers 
 to order groceries online. After a customer completes an order, the online service 
 sends a CSV file that contains the customer’s requests to the grocery store. 
 The store needs you to write a program that reads the CSV file and prints to the 
@@ -7,6 +7,7 @@ terminal window a receipt that lists the purchased items and shows the subtotal,
 the sales tax amount, and the total.
 """
 import csv
+from datetime import datetime
 
 def main():
     # Declare index of the dictionary
@@ -14,48 +15,110 @@ def main():
     PRODUCT_NAME_INDEX = 1
     PRODUCT_PRICE_INDEX = 2
 
-    # Call the read_dictionary function and store the data in 
-    # products.csv file into a variable named products_dict
-    products_dict = read_dictionary('products.csv', PRODUCT_KEY_INDEX)
+    try:
+        # Call the read_dictionary function and store the data in 
+        # products.csv file into a variable named products_dict
+        products_dict = read_dictionary('products.csv', PRODUCT_KEY_INDEX)
 
-    # Print the entire products dictionary
-    print('All Products')
-    print(products_dict)
-
-    # Open de request.csv file for read
-    with open('request.csv', 'rt') as csv_file:
-        reader = csv.reader(csv_file)
-
-        # Skip the first row (Header row)
-        next(reader)
-
+        # Print the header for store company name
+        print('Inkom Emporium Store')
         print()
-        print('Requested Items')
 
-        # Processes each row from the request.csv file
-        # Use the requested product number to find the corresponding item in the products_dict.
-        for row_list in reader:
+        # Open de request.csv file for read
+        filename = 'request.csv'
+        with open(filename, 'rt') as csv_file:
+            reader = csv.reader(csv_file)
 
-            PRODUCT_ID_INDEX = 0
-            QUANTITY_INDEX = 1
+            # Skip the first row (Header row)
+            next(reader)
 
-            quantity = 0
-            price = 0
+            # Declare variables
+            items = 0
+            subtotal = 0
 
-            # For the current row, retrieve the
-            # values in columns 0 and 1.
-            product_id = row_list[PRODUCT_ID_INDEX]
-            quantity = int(row_list[QUANTITY_INDEX])
-
-            # Use the requested product id to find the corresponding item in the products_dict.
-            if product_id in products_dict:
-                list = products_dict[product_id]
-                name = list[PRODUCT_NAME_INDEX]
-                price = list[PRODUCT_PRICE_INDEX]
-        
-            # Print the product name, requested quantity, and product price.
-            print(f'{name}: {quantity} @ {price}')
+            # Print a brief opening to the request list
+            print('Requested Items')
             
+            # Processes each row from the request.csv file
+            # Use the requested product number to find the corresponding item in the products_dict.
+            for row_list in reader:
+
+                PRODUCT_ID_INDEX = 0
+                QUANTITY_INDEX = 1
+
+                # For the current row, retrieve the
+                # values in columns 0 and 1.
+                product_id = row_list[PRODUCT_ID_INDEX]
+                quantity = int(row_list[QUANTITY_INDEX])
+
+                # Compute the total number of items in the list
+                items += quantity             
+                
+                # Use the requested product id to find the corresponding item in the products_dict.
+                if product_id in products_dict:
+                    list = products_dict[product_id]
+                    name = list[PRODUCT_NAME_INDEX]
+                    price = float(list[PRODUCT_PRICE_INDEX])
+
+                    # Compute the subtotal amount 
+                    subtotal += (price * quantity)
+
+                    # Print the product name, requested quantity, and product price.
+                    print(f'{name}: {quantity} @ {price}')
+            
+            # Compute the sales tax according to the subtotal amount
+            sales_tax = subtotal * 0.06
+
+            # Compute the total amount in $ of the request list items
+            total = sales_tax + subtotal
+
+            # Print all the information to the client
+            print()
+            print(f'Number of Items: {items}')
+            print(f'Subtotal: {subtotal:.2f}')
+            print(f'Sales Tax: {sales_tax:.2f}')
+            print(f'Total: {total:.2f}')
+
+            # Compute a discount the product prices by 10% if today is Tuesday or Wednesday, and if hour of day is lees than 11am.
+            today = datetime.now()
+            hour_of_day = today.hour
+
+            if today.weekday() == 1 or today.weekday() == 2 and hour_of_day < 11:
+                discount = 0.20
+                discount_amount = total * discount
+                new_total = total - discount_amount
+                print()
+                print(f'Discount for Today: {discount*100:.0f}% =  {discount_amount:.2f}')
+                print(f'Total after Discount: {new_total:.2f}')
+            elif today.weekday() == 1 or today.weekday() == 2:
+                day_discount = 0.10
+                discount_amount = total * day_discount
+                new_total = total - discount_amount
+                print()
+                print(f'Discount for Today: {day_discount*100:.0f}% =  {discount_amount:.2f}')
+                print(f'Total after Discount: {new_total:.2f}')
+            elif hour_of_day < 11:
+                hour_discount = 0.10
+                discount_amount = total * hour_discount
+                new_total = total - discount_amount
+                print()
+                print(f'Discount for Today: {hour_discount*100:.0f}% =  {discount_amount:.2f}')
+                print(f'Total after Discount: {new_total:.2f}')
+            else:
+                pass
+
+            # Print the thank you message, time and date
+            print()
+            print('Thank you for shopping at the Inkom Emporium Store.')
+            print(f'{today:%a %b %d  %H:%M:%S %Y}')
+
+    except FileNotFoundError as not_found:
+        print('Error: missing file')
+        print(not_found)
+    
+    except KeyError as key_err:
+        print(f'Error: unknown product ID in the {filename} file')
+        print(key_err)
 
 def read_dictionary(filename, key_column_index):
     """Read the contents of a CSV file into a compound
