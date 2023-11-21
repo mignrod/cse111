@@ -96,7 +96,7 @@ def read_list(filename):
 
 
 # If this file was executed like this:
-# > python teach_solution.py
+# > python get_line.py
 # then call the main function. However, if this file
 # was simply imported, then skip the call to main.
 if __name__ == "__main__":
