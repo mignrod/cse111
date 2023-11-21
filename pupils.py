@@ -15,7 +15,25 @@ SURNAME_INDEX = 1
 BIRTHDATE_INDEX = 2
 
 def main():
-    pass
+    students_list = read_compound_list('pupils.csv')
+
+    sort_birthday = lambda birth: birth[BIRTHDATE_INDEX]
+    sort_given_name = lambda given: given[GIVEN_NAME_INDEX]
+
+    def extract_month_day(students_list):
+        string = students_list[BIRTHDATE_INDEX]
+        month_day = string[5:]
+        return month_day
+    
+
+    youngest_to_oldest = sorted(students_list, key=sort_birthday)
+    given_name = sorted(students_list, key=sort_given_name)
+    month_day = sorted(students_list, key=extract_month_day)
+
+    print('Ordered from Oldest to Youngest')
+    # print_list(youngest_to_oldest)
+    # print_list(given_name)
+    print_list(month_day)
 
 def read_compound_list(filename):
     """Read the text from a CSV file into a compound list.
@@ -56,7 +74,9 @@ def print_list(compound_list):
     Parameter: a list with the content of the CSV file
     Return: The printed list
     """
-    pass
+    for students in compound_list:
+        print(students)
+    return students
 
 # If this file is executed like this:
 # > python pupils.py
