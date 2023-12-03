@@ -9,6 +9,8 @@ import tkinter as tk
 import numpy as np
 from tkinter.filedialog import *
 from tkinter import *
+import sys
+import time
 
 def main():
     # Create the Tk root object.
@@ -18,7 +20,7 @@ def main():
     # a window is also called a frame.
     frm_main = Frame(root)
     frm_main.master.title('Image Editor')
-    frm_main.pack(padx=50, pady=50, expand=1)
+    frm_main.pack(padx=50, pady=50)
 
     # Call the populate_main_window function, which will add
     # labels, text entry boxes, and buttons to the main window.
@@ -45,6 +47,12 @@ def populate_main_window(frm_main):
     btn_pencil_img = Button(frm_main, text='Sketch Pencil Effect', bg='aquamarine', font='Helvetica 16')
     btn_rz_img = Button(frm_main, text='Resize/Rescale Image', bg='aquamarine', font='Helvetica 16')
     btn_bw_img = Button(frm_main, text='Black & White Image', bg='aquamarine', font='Helvetica 16')
+    btn_clear = Button(frm_main, text='Clear', bg='black', fg='white', font='Helvetica 16')
+    btn_exit = Button(frm_main, text='Exit', bg='red', fg='white', font='Helvetica 16')
+
+    #Create a status bar
+    global lbl_status
+    lbl_status = Label(frm_main, text='', bg=None, padx=50, pady=20)
 
     # Layout buttons and label in a grid.
     lbl_welcome.grid(row=0, column=0, columnspan=2, padx=20, pady=10)
@@ -52,8 +60,28 @@ def populate_main_window(frm_main):
     btn_pencil_img.grid(row=1, column=1, padx=15, pady=12)
     btn_rz_img.grid(row=2, column=0, padx=15, pady=12)
     btn_bw_img.grid(row=2, column=1, padx=15, pady=12)
+    lbl_status.grid(row=3, column=0, columnspan=2, padx=20, pady=20)
+    btn_clear.grid(row=4, column=0, padx=15, pady=12)
+    btn_exit.grid(row=4, column=1, padx=15, pady=12)
 
-    btn_pencil_img.config(command=sketch_image())
+    btn_pencil_img.config(command=sketch_image)
+
+    def clear():
+        """
+        Clear the message and let user select another tool.
+        """
+        btn_clear.focus()
+        lbl_status.config(text='')
+
+    def exit():
+        """
+        System exit from the app
+        """
+        btn_exit.focus()
+
+    # Configure clear and exit buttons
+    btn_clear.config(command=clear)
+    btn_exit.config(command=sys.exit)
 
 def sketch_image():
     """
@@ -62,31 +90,37 @@ def sketch_image():
     Parameter: a simple image
     Return: nothing
     """
-    # Give a brief explanation to user
-    print('Hola')
-    # image_path = askopenfilename()
+    msg = lbl_status['text']
+    msg = 'Select Image'
+    lbl_status.config(text=msg, font='Helvetica 16')
 
-    # image = cv2.imread(image_path)
+    # Select file from device
+    image_path = askopenfilename()
+    image = cv2.imread(image_path)
 
-    # os.chdir(r'C:/Users/User/Desktop/convertimages/sketch')
-    # directory = os.getcwd()
-    # print("Before saving image:")   
-    # print(os.listdir(directory)) 
+    # Show a message in the status label
+    msg = 'Processing Image'
+    lbl_status.config(text=msg, font='Helvetica 16')
 
-    # gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    # inverted = 250-gray_image
-    # blurred = cv2.GaussianBlur(inverted, (21, 21), 0)
-    # invertedblur = 255-blurred
+    # Edit image and convert
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    inverted = 250-gray_image
+    blurred = cv2.GaussianBlur(inverted, (21, 21), 0)
+    invertedblur = 255-blurred
 
-    # pencilsketch = cv2.divide(gray_image, invertedblur, scale = 256.0)
+    # Save image in a variable called pencilsketch
+    pencilsketch = cv2.divide(gray_image, invertedblur, scale = 256.0)
 
-    # filename = input('Enter the file name: ')
-    # # Saving the file
-    # cv2.imwrite(filename, pencilsketch)
+    # Ask user folder and name to save the image
+    filename = asksaveasfilename()
 
-    # print("After saving image:")    
-    # print()  
-    # print('Successfully saved') 
+    # Saving the file
+    cv2.imwrite(filename, pencilsketch)
+
+    # Show a message for complete operation
+    msg = 'Image Saved Successfully!'
+    lbl_status.config(text=msg, font='Helvetica 16', bg='light green',)
+
 
 # If this file is executed like this:
 # > python image_editor.py
