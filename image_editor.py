@@ -10,7 +10,9 @@ import numpy as np
 from tkinter.filedialog import *
 from tkinter import *
 import sys
-import time
+from PIL import Image, ImageTk
+import imutils
+
 
 def main():
     # Create the Tk root object.
@@ -18,6 +20,7 @@ def main():
 
     # Create the main window. In tkinter,
     # a window is also called a frame.
+    global frm_main
     frm_main = Frame(root)
     frm_main.master.title('Image Editor')
     frm_main.pack(padx=50, pady=50)
@@ -52,7 +55,7 @@ def populate_main_window(frm_main):
 
     #Create a status bar
     global lbl_status
-    lbl_status = Label(frm_main, text='', bg=None, padx=50, pady=20)
+    lbl_status = Label(frm_main, text='', padx=50, pady=20)
 
     # Layout buttons and label in a grid.
     lbl_welcome.grid(row=0, column=0, columnspan=2, padx=20, pady=10)
@@ -60,10 +63,11 @@ def populate_main_window(frm_main):
     btn_pencil_img.grid(row=1, column=1, padx=15, pady=12)
     btn_rz_img.grid(row=2, column=0, padx=15, pady=12)
     btn_bw_img.grid(row=2, column=1, padx=15, pady=12)
-    lbl_status.grid(row=3, column=0, columnspan=2, padx=20, pady=20)
-    btn_clear.grid(row=4, column=0, padx=15, pady=12)
-    btn_exit.grid(row=4, column=1, padx=15, pady=12)
+    lbl_status.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
+    btn_clear.grid(row=4, column=0, padx=10, pady=12)
+    btn_exit.grid(row=4, column=1, padx=10, pady=12)
 
+    # Give commands for every tool
     btn_pencil_img.config(command=sketch_image)
 
     def clear():
@@ -72,12 +76,6 @@ def populate_main_window(frm_main):
         """
         btn_clear.focus()
         lbl_status.config(text='')
-
-    def exit():
-        """
-        System exit from the app
-        """
-        btn_exit.focus()
 
     # Configure clear and exit buttons
     btn_clear.config(command=clear)
@@ -119,7 +117,31 @@ def sketch_image():
 
     # Show a message for complete operation
     msg = 'Image Saved Successfully!'
-    lbl_status.config(text=msg, font='Helvetica 16', bg='light green',)
+    lbl_status.config(text=msg, font='Helvetica 16', fg='green')
+
+    # Show Image
+    show_images(pencilsketch)
+    
+    
+def show_images(image):
+    """
+    Show edited images
+    """ 
+    root = Toplevel(frm_main)
+    root.geometry('400x400')
+    root.title('Output Image')
+
+    # Catch Output Image
+    image = imutils.resize(image, height=100, width=100)
+    image_to_show = image
+    im = Image.fromarray(image_to_show)
+    img = ImageTk.PhotoImage(image=im)
+    
+
+    img = Label(root, image=img)    
+    root.mainloop()
+
+
 
 
 # If this file is executed like this:
