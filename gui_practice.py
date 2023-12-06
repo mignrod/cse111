@@ -29,13 +29,43 @@ def detect_color():
     image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     image_gray = cv2.cvtColor(image_gray, cv2.COLOR_GRAY2BGR)
     image_HSV = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    
+
+    if selected.get() == 1:
+        # Detect red color
+        red_mask1 = cv2.inRange(image_HSV, rng_down1, rng_high1)
+        red_mask2 = cv2.inRange(image_HSV, rng_down2, rng_high2)
+        mask = cv2.add(red_mask1, red_mask2)
+    else:
+        mask = cv2.inRange(image_HSV, rng_down, rng_high)
+
+    mask = cv2.medianBlur(mask, 7)
+    color_detected = cv2.bitwise_and(image, image, mask=mask)
+
+    # Gray background
+    inv_mask = cv2.bitwise_not(mask)
+    gray_bg = cv2.bitwise_and(image_gray, image_gray, mask=inv_mask)
+
+    # Get the final Image
+    final_image = cv2.add(gray_bg, color_detected)
+    output_image = cv2.cvtColor(final_image, cv2.COLOR_BGR2RGB)
+
+    # Visualize image in the GUI
+    im = Image.fromarray(output_image)
+    img = ImageTk.PhotoImage(image=im)
+
+    lbl_output_image.configure(image=img)
+    lbl_output_image.image = img
+
+    # Label for output image
+    lbl_info3 = Label(root, text='Output Image', font='bold')
+    lbl_info3.grid(column=1, row=0, padx=5, pady=5)
+
 
 
 def select_image():
     path_image = filedialog.askopenfilename(filetypes=[
-        ('image', '.jpg')
-        ('image', '.jpeg')
+        ('image', '.jpg'),
+        ('image', '.jpeg'),
         ('image', '.png')
     ])
 
@@ -56,15 +86,19 @@ def select_image():
         lbl_info1 = Label(root, text='Input Image')
         lbl_info1.grid(column=0, row=1, padx=5, pady=5)
 
+        # Don't save the previous selected color
+        lbl_output_image.image = ''
+        selected.set(0)
+
 image = None
 
-root = tk.Tk()
+root = Tk()
 
 lbl_input_image = Label(root)
 lbl_input_image.grid(column=0, row=2)
 
 lbl_output_image = Label(root)
-lbl_output_image.grid(column=1, row=1)
+lbl_output_image.grid(column=1, row=1, rowspan=6)
 
 lbl_info2 = Label(root, text='What color would you like to highlight?')
 lbl_info2.grid(column=0, row=3, padx=5, pady=5)
