@@ -42,28 +42,42 @@ def select_image():
     Parameter:
     Return: nothing
     """
-    global image_path
-    image_path = filedialog.askopenfilename(filetypes=[
-        ('image', '.jpg'),
-        ('image', '.jpeg'),
-        ('image', '.png')])
+    try:
+        global image_path
+        image_path = filedialog.askopenfilename(filetypes=[
+            ('image', '.jpg'),
+            ('image', '.jpeg'),
+            ('image', '.png')])
+        
+        if len(image_path) > 0:
+            global image
 
-    if len(image_path) > 0: 
-        global image
+            # Read input image
+            image = cv2.imread(image_path)
+            image = imutils.resize(image, height=330)
 
-        # Read input image
-        image = cv2.imread(image_path)
-        image = imutils.resize(image, height=330)
+            # Show input image in the GUI
+            image_to_show = imutils.resize(image, width=200)
+            image_to_show = cv2.cvtColor(image_to_show, cv2.COLOR_BGR2RGB)
+            im = Image.fromarray(image_to_show)
+            img = ImageTk.PhotoImage(image=im)
 
-        # Show input image in the GUI
-        image_to_show = imutils.resize(image, width=200)
-        image_to_show = cv2.cvtColor(image_to_show, cv2.COLOR_BGR2RGB)
-        im = Image.fromarray(image_to_show)
-        img = ImageTk.PhotoImage(image=im)
-
-        lbl_input_image.configure(image=img)
-        lbl_input_image.image = img
+            lbl_input_image.configure(image=img)
+            lbl_input_image.image = img
     
+    except FileNotFoundError:
+        lbl_status.config(text='File not found')
+        
+    except ValueError:
+        lbl_status.config(text='No Image Selected')
+
+    except AttributeError:
+        lbl_status.config(text='Unselected Object')
+
+    except NameError as name_err:
+        lbl_status.config(text='No Image Selected')
+
+
 def populate_main_window(frm_main):
     """Populate the main window of this program. In other words, put
     the labels, text entry boxes, and buttons into the main window.
