@@ -14,9 +14,6 @@ import sys
 from PIL import Image, ImageTk
 from rembg import remove
 from turtle import *
-import pixellib
-from pixellib.tune_bg import alter_bg
-
 
 def main():
     # Create the Tk root object.
@@ -192,15 +189,16 @@ def change_bg_img():
     image
 
     # Create the new background in gray scale
-    bg_changed = alter_bg()
-    bg_changed.load_pascalvoc_model('deeplabv3_xception_tf_dim_ordering_tf_kernels.h5')
+    bg_changed = cv2.createBackgroundSubtractorMOG2()
+    bg_changed.load_pascalvoc_model("deeplabv3_xception_tf_dim_ordering_tf_kernels.h5")
 
     # Colored image to show
-    image_show = bg_changed.gray_bg(image)
+    output_image_name ="gray_img.jpg"
+    image_show = bg_changed.gray_bg(image, output_image_name)
 
     # Ask filename and save image
-    filename = filedialog.asksaveasfilename()
-    cv2.imwrite(filename, image_show)
+    # filename = filedialog.asksaveasfilename()
+    cv2.imwrite(output_image_name, image_show)
 
     # # Show Image colored
     # show_images(rb_image_show)
