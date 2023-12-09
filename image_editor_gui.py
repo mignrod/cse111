@@ -7,22 +7,17 @@ import cv2
 import os
 import tkinter as tk
 import numpy as np
+import imutils
 from tkinter import filedialog
 from tkinter import *
-from tkinter import ttk
 import sys
 from PIL import Image, ImageTk
-import imutils
-
+from rembg import remove
+from turtle import *
 
 def main():
     # Create the Tk root object.
     root = tk.Tk()
-
-    # Create a fixed size for window
-    # and a minimum size in resized mode.
-    root.geometry('850x630+30+30')
-    root.minsize(width=400, height=300)
 
     # Create the main window. In tkinter,
     # a window is also called a frame.
@@ -47,6 +42,7 @@ def select_image():
     Parameter:
     Return: nothing
     """
+    global image_path
     image_path = filedialog.askopenfilename(filetypes=[
         ('image', '.jpg'),
         ('image', '.jpeg'),
@@ -78,23 +74,24 @@ def populate_main_window(frm_main):
     """    
     # image = None
     # Creat a brief information for users. 
-    lbl_welcome = Label(frm_main, text='Select an Image to Edit', font='Helvetica 16', bg='red')
+    lbl_welcome = Label(frm_main, text='Select an Image to Edit', font='Helvetica 16', bg='light gray', relief=RAISED)
 
     # Create labels in which images are shows
     lbl_info_input_img = Label(frm_main, text='Input Image', width=40, font='Helvetica 10', bd=2)
     global lbl_input_image
     lbl_input_image = Label(frm_main, width=40)
-    lbl_info_ouput_img = Label(frm_main, text='Output Image', width=40, font='Helvetica 10', bd=2)
+    global lbl_info_output_img
+    lbl_info_output_img = Label(frm_main, width=35, font='Helvetica 14', bd=2)
     global lbl_output_image
-    lbl_output_image = Label(frm_main, width=80, bg='beige')
+    lbl_output_image = Label(frm_main, width=35, bg='light gray', relief=RAISED)
 
     # Make and add the principal buttons letting user 
     # choose an edition options.
-    btn_select_img = Button(frm_main, text='Select Image', font='Helvetica 12', width=30, command=select_image)
-    btn_rb_img = Button(frm_main, text='Remove Background', bg='aquamarine', font='Helvetica 10')
+    btn_select_img = Button(frm_main, text='Select Image', font='Helvetica 12', width=30, relief=RAISED, command=select_image)
+    btn_rb_img = Button(frm_main, text='Remove Background', bg='aquamarine', font='Helvetica 10', command=rm_bg_img)
     btn_pencil_img = Button(frm_main, text='Sketch Pencil Effect', bg='aquamarine', font='Helvetica 10', command=sketch_image)
-    btn_rz_img = Button(frm_main, text='Resize/Rescale Image', bg='aquamarine', font='Helvetica 10')
-    btn_bw_img = Button(frm_main, text='Black & White Image', bg='aquamarine', font='Helvetica 10')
+    btn_change_bg_img = Button(frm_main, text='Change Backgroung', bg='aquamarine', font='Helvetica 10', command=change_bg_img)
+    btn_bw_img = Button(frm_main, text='Black & White Image', bg='aquamarine', font='Helvetica 10', command=bw_image)
     btn_clear = Button(frm_main, text='Clear', bg='black', fg='white', font='Helvetica 10')
     btn_exit = Button(frm_main, text='Exit', bg='red', fg='white', font='Helvetica 10')
 
@@ -103,19 +100,19 @@ def populate_main_window(frm_main):
     lbl_status = Label(frm_main, text='', padx=5, pady=5)
 
     # Layout buttons and label in a grid.
-    lbl_welcome.grid(row=0, column=0, columnspan=3, padx=10, pady=6, sticky='nsew')
+    lbl_welcome.grid(row=0, column=0, columnspan=4, padx=6, pady=6, sticky='nsew')
     btn_select_img.grid(row=1, column=0, columnspan=2, padx=5, pady=5)
     lbl_info_input_img.grid(row=2, column=0, columnspan=2, padx=5, pady=5, sticky='nsew')
     lbl_input_image.grid(row=3, column=0, columnspan=2, padx=5, pady=5, sticky='nsew')
     btn_rb_img.grid(row=4, column=0, padx=5, pady=5, sticky='nsew')
     btn_pencil_img.grid(row=4, column=1, padx=5, pady=5, sticky='nsew')
-    btn_rz_img.grid(row=5, column=0, padx=5, pady=5, sticky='nsew')
+    btn_change_bg_img.grid(row=5, column=0, padx=5, pady=5, sticky='nsew')
     btn_bw_img.grid(row=5, column=1, padx=5, pady=5, sticky='nsew')
     lbl_status.grid(row=6, column=0, columnspan=2, padx=5, pady=5, sticky='nsew')
     btn_clear.grid(row=7, column=0, padx=5, pady=5, sticky='nsew')
     btn_exit.grid(row=7, column=1, padx=5, pady=5, sticky='nsew')
-    lbl_info_ouput_img.grid(row=1, column=3, padx=5, pady=5, sticky='nsew')
-    lbl_output_image.grid(row=2, column=3, rowspan=5, padx=5, pady=5, sticky='nsew')
+    lbl_info_output_img.grid(row=1, column=3, padx=5, pady=5, sticky='nsew')
+    lbl_output_image.grid(row=2, column=3, rowspan=6, padx=5, pady=5, sticky='nsew')
 
     # Give commands for every tool
     # btn_pencil_img.config(command=sketch_image)
@@ -128,6 +125,7 @@ def populate_main_window(frm_main):
         lbl_status.config(text='')
         lbl_input_image.config(image='')
         lbl_output_image.config(image='')
+        lbl_info_output_img.config(text='')
 
     # Configure clear and exit buttons
     btn_clear.config(command=clear)
@@ -165,19 +163,82 @@ def sketch_image():
     # Show Image
     show_images(pencilsketch)
     
-    
+def rm_bg_img():
+    # Get Image
+    image
+
+    # Remove background
+    rb_image = remove(image)
+
+    # Colored image to show
+    rb_image_show = cv2.cvtColor(rb_image, cv2.COLOR_BGR2RGB)
+
+    # Ask filename and save image
+    filename = filedialog.asksaveasfilename(filetypes=[('images', '.png')])
+    cv2.imwrite(filename+'.png', rb_image)
+
+    # Show Image colored
+    show_images(rb_image_show)
+
+    # Show a message for complete operation
+    msg = 'Image Saved Successfully!'
+    lbl_status.config(text=msg, font='Helvetica 14', fg='green')
+        
+def change_bg_img():
+    # Get Image
+    image
+
+    # Create the new background in gray scale
+    bg_changed = cv2.createBackgroundSubtractorMOG2()
+    bg_changed.load_pascalvoc_model("deeplabv3_xception_tf_dim_ordering_tf_kernels.h5")
+
+    # Colored image to show
+    output_image_name ="gray_img.jpg"
+    image_show = bg_changed.gray_bg(image, output_image_name)
+
+    # Ask filename and save image
+    # filename = filedialog.asksaveasfilename()
+    cv2.imwrite(output_image_name, image_show)
+
+    # # Show Image colored
+    # show_images(rb_image_show)
+
+    # Show a message for complete operation
+    msg = 'Image Saved Successfully!'
+    lbl_status.config(text=msg, font='Helvetica 14', fg='green')
+
+def bw_image():
+    # Get Image
+    image
+
+    # Create the Black and White image
+    bw_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Ask filename and save image
+    filename = filedialog.asksaveasfilename()
+    cv2.imwrite(filename, bw_image)
+
+    # Show gray Image
+    show_images(bw_image)
+
+    # Show a message for complete operation
+    msg = 'Image Saved Successfully!'
+    lbl_status.config(text=msg, font='Helvetica 14', fg='green')
+
 def show_images(image):
     """
     Show edited images
     """ 
     # Catch Output Image
-    image = imutils.resize(image, height=100, width=100)
+    image = imutils.resize(image, width=350)
     image_to_show = image
     im = Image.fromarray(image_to_show)
     img = ImageTk.PhotoImage(image=im)
 
     lbl_output_image.configure(image=img)
     lbl_output_image.image = img
+    lbl_info_output_img.configure(text='Output Image')
+
 
 # If this file is executed like this:
 # > python image_editor.py
