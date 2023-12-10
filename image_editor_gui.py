@@ -4,16 +4,13 @@
 # and save new images into theirs devices.
 
 import cv2
-import os
 import tkinter as tk
-import numpy as np
 import imutils
 from tkinter import filedialog
 from tkinter import *
 import sys
 from PIL import Image, ImageTk
 from rembg import remove
-from turtle import *
 
 def main():
     # Create the Tk root object.
@@ -67,16 +64,6 @@ def select_image():
     
     except FileNotFoundError:
         lbl_status.config(text='File not found')
-        
-    except ValueError:
-        lbl_status.config(text='No Image Selected')
-
-    except AttributeError:
-        lbl_status.config(text='Unselected Object')
-
-    except NameError as name_err:
-        lbl_status.config(text='No Image Selected')
-
 
 def populate_main_window(frm_main):
     """Populate the main window of this program. In other words, put
@@ -104,7 +91,6 @@ def populate_main_window(frm_main):
     btn_select_img = Button(frm_main, text='Select Image', font='Helvetica 12', width=30, relief=RAISED, command=select_image)
     btn_rb_img = Button(frm_main, text='Remove Background', bg='aquamarine', font='Helvetica 10', command=rm_bg_img)
     btn_pencil_img = Button(frm_main, text='Sketch Pencil Effect', bg='aquamarine', font='Helvetica 10', command=sketch_image)
-    btn_change_bg_img = Button(frm_main, text='Change Backgroung', bg='aquamarine', font='Helvetica 10', command=change_bg_img)
     btn_bw_img = Button(frm_main, text='Black & White Image', bg='aquamarine', font='Helvetica 10', command=bw_image)
     btn_clear = Button(frm_main, text='Clear', bg='black', fg='white', font='Helvetica 10')
     btn_exit = Button(frm_main, text='Exit', bg='red', fg='white', font='Helvetica 10')
@@ -120,16 +106,12 @@ def populate_main_window(frm_main):
     lbl_input_image.grid(row=3, column=0, columnspan=2, padx=5, pady=5, sticky='nsew')
     btn_rb_img.grid(row=4, column=0, padx=5, pady=5, sticky='nsew')
     btn_pencil_img.grid(row=4, column=1, padx=5, pady=5, sticky='nsew')
-    btn_change_bg_img.grid(row=5, column=0, padx=5, pady=5, sticky='nsew')
-    btn_bw_img.grid(row=5, column=1, padx=5, pady=5, sticky='nsew')
+    btn_bw_img.grid(row=5, column=0, columnspan=2, padx=5, pady=5, sticky='nsew')
     lbl_status.grid(row=6, column=0, columnspan=2, padx=5, pady=5, sticky='nsew')
     btn_clear.grid(row=7, column=0, padx=5, pady=5, sticky='nsew')
     btn_exit.grid(row=7, column=1, padx=5, pady=5, sticky='nsew')
     lbl_info_output_img.grid(row=1, column=3, padx=5, pady=5, sticky='nsew')
     lbl_output_image.grid(row=2, column=3, rowspan=6, padx=5, pady=5, sticky='nsew')
-
-    # Give commands for every tool
-    # btn_pencil_img.config(command=sketch_image)
 
     def clear():
         """
@@ -198,29 +180,6 @@ def rm_bg_img():
     msg = 'Image Saved Successfully!'
     lbl_status.config(text=msg, font='Helvetica 14', fg='green')
         
-def change_bg_img():
-    # Get Image
-    image
-
-    # Create the new background in gray scale
-    bg_changed = cv2.createBackgroundSubtractorMOG2()
-    bg_changed.load_pascalvoc_model("deeplabv3_xception_tf_dim_ordering_tf_kernels.h5")
-
-    # Colored image to show
-    output_image_name ="gray_img.jpg"
-    image_show = bg_changed.gray_bg(image, output_image_name)
-
-    # Ask filename and save image
-    # filename = filedialog.asksaveasfilename()
-    cv2.imwrite(output_image_name, image_show)
-
-    # # Show Image colored
-    # show_images(rb_image_show)
-
-    # Show a message for complete operation
-    msg = 'Image Saved Successfully!'
-    lbl_status.config(text=msg, font='Helvetica 14', fg='green')
-
 def bw_image():
     # Get Image
     image
