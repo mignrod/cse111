@@ -160,6 +160,12 @@ def sketch_image():
     show_images(pencilsketch)
     
 def rm_bg_img():
+    """
+    Remove the background of any image
+
+    Parameter: a simple image
+    Return: nothing
+    """
     # Get Image
     image
 
@@ -181,6 +187,12 @@ def rm_bg_img():
     lbl_status.config(text=msg, font='Helvetica 14', fg='green')
         
 def bw_image():
+    """
+    Convert  simple image into a new grayscale image
+
+    Parameter: a simple image
+    Return: nothing
+    """
     # Get Image
     image
 
@@ -200,7 +212,9 @@ def bw_image():
 
 def show_images(image):
     """
-    Show edited images
+    Show edited images in label output.
+    Parameter: image
+    Return: nothing
     """ 
     # Catch Output Image
     image = imutils.resize(image, width=350)
