@@ -1,0 +1,37 @@
+Please respond thoroughly (at least two sentences for each question) to
+the following three questions.
+
+1. Describe an experience you had this semester where you saw the power of
+functions.
+This semester I was always learning about how useful functions are. But without a doubt,
+the moment that made me reflect the most was precisely in my final project.
+It doesn't mean that I couldn't have perceived it before, but by writing my own code for the project
+I managed to notice how the use of these functions allowed me to focus on the function I wanted
+the program to perform, dividing it into segments that helped me a lot to achieve the objective.
+
+Definitely, it is a very useful way to organize my code, and to be able to better solve each specific need.
+
+
+2. In your judgment, what is the value of test functions?
+Although I would write my own code, and try to identify each function in the best way,
+I believe test functions have great value, since making them as a standard will allow us
+to verify and analyze any code errors regardless of who made it.
+
+Furthermore, obtaining this ability to work with Test Functions allows us to execute tests better.
+It is a very useful and powerful tool, and a skill that will make our work easier in the future.
+​
+
+
+3. Describe your process for troubleshooting and fixing a program that
+has a problem. What is one thing you can do to improve your process?
+First of all, I think I should run the program and see what possible error message the system throws up.
+Once the error is identified we can have a better understanding of where we can start, and if we do not know it
+we know what documentation we should review.
+
+Another important skill is to develop Test Functions for this specific program, facilitating testing and problem identification.
+
+I believe that the best way to improve the problem-solving process is to apply it constantly, practice in this case helps to
+improve these skills.
+In my experience in IT support that is the best way to improve, followed by constant learning and training
+
+
