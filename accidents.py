@@ -101,7 +101,6 @@ def estimate_reduction(row, behavior_key, perc_reduc):
     reduc_injur = int(round(injuries * ratio, 0))
     return reduc_injur, reduc_fatal
 
-
 # If this file was executed like this:
 # > python accidents.py
 # then call the main function. However, if this file
